@@ -8,44 +8,76 @@ uint32_t _strlen(const char* strSrc);
 uint16_t _getCountSeparator(const char* str, const char* separator);
 
 /// \brief Splitting a string by a given separator
-void split(char* strSrc, const char* separator, Params_s* dst)
+void split(char* strSrc, const char separator, Params_s* dst)
 {
-    uint8_t count_sep = _getCountSeparator(strSrc, separator);
-    uint16_t lenSep = _strlen((char*)separator);
+    // uint8_t count_sep = _getCountSeparator(strSrc, separator);
+    // uint16_t lenSep = _strlen((char*)separator);
 
-    //dst->argv = (char**) malloc(sizeof(char*) * count_sep);
-    dst->argc = count_sep;
+    // //dst->argv = (char**) malloc(sizeof(char*) * count_sep);
+    // dst->argc = count_sep;
 
-    int start_index = 0;
-    int size_word = 0;
+    // int start_index = 0;
+    // int size_word = 0;
 
-    int co = 0;
-    int co_arg = 0;
+    // int co = 0;
+    // int co_arg = 0;
+    // while(1)
+    // {
+
+    //     uint16_t s = 0;
+
+    //     for(; s < lenSep; s++){
+            
+    //         if((strSrc[co] == separator[s]) || (strSrc[co] == '\0'))
+    //         {
+    //             size_word = co - start_index;
+
+    //             //dst->argv[co_arg] = malloc(sizeof(char) * (size_word + 1));
+    //             dst->argv[co_arg][size_word] = '\0';
+    //             _strcpy(strSrc, start_index, dst->argv[co_arg], 0, size_word);
+
+    //             start_index = co + 1;
+    //             co_arg++;
+    //             break;
+    //         }
+    //     }
+
+    //     if (strSrc[co] == '\0')
+    //         break;
+
+    //     co++;
+    // }
+    int str_index=0;
+    int start_index=0;
+    int start_flag=0;
+    dst->argc=0;
     while(1)
     {
-
-        uint16_t s = 0;
-
-        for(; s < lenSep; s++){
-            if((strSrc[co] == separator[s]) || (strSrc[co] == '\0'))
-            {
-                size_word = co - start_index;
-
-                //dst->argv[co_arg] = malloc(sizeof(char) * (size_word + 1));
-                dst->argv[co_arg][size_word] = '\0';
-                _strcpy(strSrc, start_index, dst->argv[co_arg], 0, size_word);
-
-                start_index = co + 1;
-                co_arg++;
-                break;
-            }
-        }
-
-        if (strSrc[co] == '\0')
+        if(strSrc[str_index]=='\0')
+        {
             break;
-
-        co++;
+        }
+        if(strSrc[str_index]==separator && strSrc[str_index+1]!=separator)
+				{
+					start_index=str_index+1;
+          start_flag=1;
+				}
+        else if(str_index==0 && strSrc[str_index]!=separator)
+        {
+            start_index=str_index;
+            start_flag=1;
+        }
+        if( start_flag==1 && strSrc[str_index]!=separator && \
+        (strSrc[str_index+1]==separator || strSrc[str_index+1]=='\0'))
+        {
+            _strcpy(strSrc,start_index,dst->argv[dst->argc],0,str_index-start_index+1);
+            dst->argc++;
+            start_flag=0;
+        }
+        str_index++;
     }
+
+
 }
 
 /// \brief free memory

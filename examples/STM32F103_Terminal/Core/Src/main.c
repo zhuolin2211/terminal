@@ -74,6 +74,11 @@ int fputc(int ch, FILE *f)
     USART1->DR = (uint8_t)ch;
     return ch;
 }
+
+void LED_ctr(void)
+{
+  HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin, CLI_GetArgDec(0)?0:1);
+}
 /* USER CODE END 0 */
 
 /**
@@ -108,6 +113,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   LL_USART_EnableIT_RXNE(USART1);
    CLI_Init(TDC_All);
+   CLI_AddCmd("LED", 	LED_ctr, 	1, TMC_None, "set led output");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -224,11 +230,22 @@ static void MX_USART1_UART_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
 }
 

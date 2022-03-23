@@ -240,7 +240,7 @@ TE_Result_e _Execute(char (*argv)[TERM_ARG_SIZE + 1], uint8_t argc)
 /// \return result execute command
 TE_Result_e _ExecuteString(const char* str)
 {
-	split((char*)str, " ", (Params_s*) &Terminal.inputArgs);
+	split((char*)str, ' ', (Params_s*) &Terminal.inputArgs);
 
 #if 0
 	CLI_DPrintf("\r\nCMD: ");

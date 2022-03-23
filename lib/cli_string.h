@@ -13,6 +13,6 @@ typedef struct{
 
 void ArgDestroy(Params_s* src);
 
-void split(char* strSrc, const char* separator, Params_s* dst);
+void split(char* strSrc, const char separator, Params_s* dst);
 
 #endif // _CLI_STRING_A_H
