@@ -29,6 +29,8 @@ typedef enum{
 	TMC_All = 0xFFFF,
 }TypeModeCmd_e;
 
+extern char dbgbuffer[];
+
 bool CLI_GetIntState();
 #define CLI_CheckAbort()			{ if (CLI_GetIntState()){return TE_WorkInt;}}
 
@@ -40,6 +42,7 @@ TA_Result_e CLI_AddCmd(const char* name,
 						const char* descr);
 
 TC_Result_e CLI_EnterChar(char c);
+void COM_Printf(char *fmt,...);
 bool CLI_Execute();
 
 bool CLI_IsArgFlag(const char* flag);

@@ -2,7 +2,7 @@
 #include "terminal_config.h"
 
 void _strcpy(const char* src, uint16_t offsetSrc, char* dst, uint16_t offsetDst, uint16_t length);
-char* _trim(const char* src);
+//char* _trim(const char* src);
 uint8_t _strcmp(const char* str1, const char* str2);
 uint32_t _strlen(const char* strSrc);
 uint16_t _getCountSeparator(const char* str, const char* separator);
@@ -72,37 +72,37 @@ void _strcpy(const char* src, uint16_t offsetSrc, char* dst, uint16_t offsetDst,
         dst[i + offsetDst] = src[i + offsetSrc];
 }
 
-char* _trim(const char* src)
-{
-    int16_t lengthDst;
-    char* result;
-    int16_t i = 0;
-    int16_t len = _strlen(src);
-    int16_t coStart = 0, coEnd = 0;
+// char* _trim(const char* src)
+// {
+//     int16_t lengthDst;
+//     char* result;
+//     int16_t i = 0;
+//     int16_t len = _strlen(src);
+//     int16_t coStart = 0, coEnd = 0;
 
-    for(; i < len; i++){
-    	if (!((src[i] > 0x00) && (src[i] < 0x21)))
-    		break;
-        coStart++;
-    }
+//     for(; i < len; i++){
+//     	if (!((src[i] > 0x00) && (src[i] < 0x21)))
+//     		break;
+//         coStart++;
+//     }
 
-    if (coStart == len){
-        result = cli_malloc(sizeof(char));
-        result[0] = '\0';
-        return result;
-    }
+//     if (coStart == len){
+//         result = cli_malloc(sizeof(char));
+//         result[0] = '\0';
+//         return result;
+//     }
 
-    for(i = len - 1; i >= 0; i++){
-        if (!((src[i] > 0x00) && (src[i] < 0x21)))
-            break;
-        coEnd++;
-    }
+//     for(i = len - 1; i >= 0; i++){
+//         if (!((src[i] > 0x00) && (src[i] < 0x21)))
+//             break;
+//         coEnd++;
+//     }
 
-    lengthDst = len - coStart - coEnd;
-    result = cli_malloc(sizeof(char) * lengthDst);
-    _strcpy(src, coStart, result, 0, lengthDst);
-    return result;
-}
+//     lengthDst = len - coStart - coEnd;
+//     result = cli_malloc(sizeof(char) * lengthDst);
+//     _strcpy(src, coStart, result, 0, lengthDst);
+//     return result;
+// }
 
 uint32_t _strlen(const char* strSrc)
 {

@@ -4,10 +4,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "terminal_config.h"
 
 typedef struct{
 	uint8_t argc;
-	char** argv;
+	char argv[TERM_ARGS_BUF_SIZE][TERM_ARG_SIZE + 1];
 }Params_s;
 
 void ArgDestroy(Params_s* src);

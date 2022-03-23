@@ -1,10 +1,11 @@
 #include "terminal.h"
-
+#include "terminal_config.h"
 #include "lib/cli_queue.h"
 #include "lib/cli_string.h"
 #include "module/cli_time.h"
 #include "module/cli_log.h"
 #include "module/cli_input.h"
+#include <stdarg.h>	
 
 #define printArrow()			{CLI_Printf(STRING_TERM_ENTER);CLI_Printf(STRING_TERM_ARROW);}	// Output of input line
 #define printArrowWithoutN()	{CLI_Printf(STRING_TERM_ARROW);}
@@ -65,9 +66,20 @@ struct
     TermCmd_s cmds[TERM_SIZE_TASK];				// list commands
     uint8_t countCommand;						// count commands
     uint8_t executeState;						// state terminal
-    volatile Params_s inputArgs;				// args current execute command
+    Params_s inputArgs;				// args current execute command
     bool isEntered;								// 
-}Terminal;		// Терминал
+}Terminal;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+
+char dbgbuffer[TERM_CMD_BUF_SIZE];
+
+void COM_Printf(char *fmt,...)
+{
+		va_list ap;                	//typedef char *va_list; va_listжЇcharећ‹зљ„жЊ‡й’€
+    va_start(ap,fmt);        	//иї™дёЄе‡Ѕж•°зљ„еЉџиѓЅжЇпјЊж‰ѕе€°з¬¬дёЂдёЄеЏЇеЏеЅўеЏ‚зљ„ењ°еќЂпјЊе№¶жЉЉењ°еќЂиµ‹з»™ap
+    vsprintf(dbgbuffer,fmt,ap);	//е…¶е®ћиї™дёЄе‡Ѕж•°ж‰ЌжЇж ёеїѓе‡Ѕж•°пјЊжІЎз ”з©¶гЂ‚гЂ‚гЂ‚
+    Terminnal_PutString(dbgbuffer);   	//иї™дёЄе‡Ѕж•°е°±жЇеЏ‘йЂЃе­—з¬¦дёІе‡Ѕж•°пјЊйЂљиї‡дёЉдёЂдёЄе‡Ѕж•°пјЊе°±жЉЉиЇҐжЏђеЏ–зљ„дёњиҐїйѓЅжЏђеЏ–дє†
+    va_end(ap);   
+}
 
 TermCmd_s* _findTermCmd(const char* cmdName);
 
@@ -111,9 +123,9 @@ void CLI_Init(TypeDefaultCmd_e defCmd){
     CLI_Printf("\r\nMax command: %d", TERM_SIZE_TASK);
     CLI_Printf("\r\n");
 
-    Terminal.inputArgs.argv = (char**) cli_malloc(sizeof(char*) * TERM_ARGS_BUF_SIZE);
-    for(uint8_t i = 0; i < TERM_ARGS_BUF_SIZE; i++)
-        Terminal.inputArgs.argv[i] = cli_malloc(sizeof(char) * (TERM_ARG_SIZE + 1));
+    // Terminal.inputArgs.argv = (char**) cli_malloc(sizeof(char*) * TERM_ARGS_BUF_SIZE);
+    // for(uint8_t i = 0; i < TERM_ARGS_BUF_SIZE; i++)
+    //     Terminal.inputArgs.argv[i] = cli_malloc(sizeof(char) * (TERM_ARG_SIZE + 1));
 
 	
 	
@@ -130,7 +142,7 @@ int8_t _IndexOfFlag(const char* flag)
 {
 	for(uint8_t i = 0; i < Terminal.inputArgs.argc; i++)
 	{
-		if (_strcmp(Terminal.inputArgs.argv[i], flag))
+		if (_strcmp((const char*)Terminal.inputArgs.argv[i], flag))
 		{
 			return i;
 		}
@@ -185,7 +197,7 @@ bool CLI_IsArgFlag(const char* flag)
 /// \param argv argument strings
 /// \param argc count argument strings
 /// \return result execute command
-TE_Result_e _Execute(char** argv, uint8_t argc)
+TE_Result_e _Execute(char (*argv)[TERM_ARG_SIZE + 1], uint8_t argc)
 {
     if (argc < 1)
         return TE_ArgErr;
@@ -477,7 +489,7 @@ void _PrintTime(CLI_Time_s* t)
 	CLI_Printf("\r\n%02d:%02d:%02d.%03d", (int) t->hour, (int) t->minute, (int) t->second, (int) t->msec);
 }
 
-/// \brief Вывод текущего времени в терминал
+/// \brief пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 /// \return none
 void CLI_PrintTime()
 {
@@ -488,7 +500,7 @@ void CLI_PrintTime()
 #endif
 }
 
-/// \brief Вывод текущего времени в терминал без перевода строки
+/// \brief пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 /// \return none
 void CLI_PrintTimeWithoutRN()
 {
@@ -621,3 +633,4 @@ TC_Result_e CLI_EnterChar(char ch)
 
 	return TC_OK;
 }
+

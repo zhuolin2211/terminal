@@ -10,11 +10,12 @@ void Q_Free(QueueObj* qdObj)
     cli_free(qd->ptrObj);
 }
 
-void Q_Init(QueueObj* qdObj, uint16_t sizeQueue, uint8_t sizeObj, uint32_t mode)
+void Q_Init(QueueObj* qdObj,  void* buffer,uint16_t sizeQueue, uint8_t sizeObj, uint32_t mode)
 {
 	Queue_s* qd = (Queue_s*) qdObj;
 
-    qd->ptrObj = (void*) cli_malloc(sizeObj * sizeQueue);
+    //qd->ptrObj = (void*) cli_malloc(sizeObj * sizeQueue);
+	qd->ptrObj = buffer;
 
     if (qd->ptrObj == NULL)
     {
@@ -34,8 +35,8 @@ bool Q_Push(QueueObj* qdObj, const void* value)
 	{
 		if ((qd->mode & QUEUE_FORCED_PUSH_POP_Msk) != 0)
 		{
-			memcpy(qd->ptrObj, qd->ptrObj + qd->sizeObj, qd->sizeObj * (qd->size - 1));
-			memcpy(qd->ptrObj + qd->sizeObj * (qd->_cntr - 1), value, qd->sizeObj);
+			memcpy((uint8_t*)qd->ptrObj, (uint8_t*)qd->ptrObj + qd->sizeObj, qd->sizeObj * (qd->size - 1));
+			memcpy((uint8_t*)qd->ptrObj + qd->sizeObj * (qd->_cntr - 1), value, qd->sizeObj);
 			qd->_cntr = qd->size;
 		}
 		else
@@ -43,7 +44,7 @@ bool Q_Push(QueueObj* qdObj, const void* value)
 	}
 	else
 	{
-		memcpy(qd->ptrObj + qd->sizeObj * qd->_cntr, value, qd->sizeObj);
+		memcpy((uint8_t*)qd->ptrObj + qd->sizeObj * qd->_cntr, value, qd->sizeObj);
 		qd->_cntr++;
 	}
 
@@ -60,7 +61,7 @@ bool Q_Pop(QueueObj* qdObj, void* value)
 	memcpy((uint8_t*)value, qd->ptrObj, qd->sizeObj);
 	for(uint8_t i = 0; i < qd->_cntr; i++)
 	{
-		memcpy((uint8_t*)(qd->ptrObj + qd->sizeObj * i), (uint8_t*)(qd->ptrObj + qd->sizeObj * (i+1)), qd->sizeObj);
+		memcpy((uint8_t*)(qd->ptrObj) + qd->sizeObj * i, (uint8_t*)qd->ptrObj + qd->sizeObj * (i+1), qd->sizeObj);
 	}
 
 	qd->_cntr--;

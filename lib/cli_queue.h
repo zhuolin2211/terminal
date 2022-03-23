@@ -20,7 +20,7 @@ typedef struct
 typedef Queue_s QueueObj;
 
 void Q_Free(QueueObj* qd);
-void Q_Init(QueueObj* qd, uint16_t sizeQueue, uint8_t sizeObj, uint32_t mode);
+void Q_Init(QueueObj* qdObj,  void* buffer,uint16_t sizeQueue, uint8_t sizeObj, uint32_t mode);
 bool Q_Push(QueueObj* qd, const void* value);
 bool Q_Pop(QueueObj* qd, void* value);
 bool Q_IsFull(QueueObj* qd);

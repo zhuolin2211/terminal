@@ -162,6 +162,7 @@ void INPUT_AddChar(char c)
 #endif	
 }
 
+static char Queue_INPUT_BUFF[3];
 void INPUT_Init()
 {
 	for(uint32_t i = 0; i < INPUT_COUNT_BUFFER; i++)
@@ -173,7 +174,7 @@ void INPUT_Init()
     
     Input.CurBuffer = &Input.Buffers[MainBuffer];
     
-    Q_Init(&Input.Symbols, 3, sizeof(char), QUEUE_FORCED_PUSH_POP_Msk);
+    Q_Init(&Input.Symbols,Queue_INPUT_BUFF, 3, sizeof(char), QUEUE_FORCED_PUSH_POP_Msk);
     
     for(uint8_t i = 0; i < 3; i++)
     {

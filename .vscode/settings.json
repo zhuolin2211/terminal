@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "terminal.h": "c",
+        "stm32f4xx.h": "c",
+        "cli_queue.h": "c",
+        "cli_string.h": "c"
+    }
+}
